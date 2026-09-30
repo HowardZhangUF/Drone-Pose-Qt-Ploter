@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.8)
+project(pose_compare_plotter)
+
+find_package(ament_cmake REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(Qt5 REQUIRED COMPONENTS Widgets)
+
+add_executable(pose_compare_plotter src/pose_compare_plotter.cpp)
+target_compile_features(pose_compare_plotter PRIVATE cxx_std_17)
+target_compile_options(pose_compare_plotter PRIVATE -Wall -Wextra -Wpedantic)
+target_include_directories(pose_compare_plotter PRIVATE include)
+ament_target_dependencies(pose_compare_plotter geometry_msgs rclcpp)
+target_link_libraries(pose_compare_plotter Qt5::Widgets)
+install(TARGETS pose_compare_plotter DESTINATION lib/${PROJECT_NAME})
+install(FILES README.md DESTINATION share/${PROJECT_NAME})
+
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  ament_add_gtest(test_pose_history test/test_pose_history.cpp)
+  target_compile_features(test_pose_history PRIVATE cxx_std_17)
+  target_include_directories(test_pose_history PRIVATE include)
+  ament_target_dependencies(test_pose_history geometry_msgs)
+
+  find_package(Qt5 REQUIRED COMPONENTS Test)
+  ament_add_gtest(test_pose_window test/test_pose_window.cpp)
+  target_compile_features(test_pose_window PRIVATE cxx_std_17)
+  target_include_directories(test_pose_window PRIVATE include)
+  ament_target_dependencies(test_pose_window geometry_msgs rclcpp)
+  target_link_libraries(test_pose_window Qt5::Widgets Qt5::Test)
+  set_tests_properties(test_pose_window PROPERTIES ENVIRONMENT
+    "QT_QPA_PLATFORM=offscreen;ROS_DOMAIN_ID=197;ROS_LOCALHOST_ONLY=1")
+endif()
+
+ament_package()
