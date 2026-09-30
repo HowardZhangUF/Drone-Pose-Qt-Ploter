@@ -1,4 +1,5 @@
 # Pose comparison viewer
+<img width="1903" height="982" alt="image" src="https://github.com/user-attachments/assets/6f923c7b-be30-4d00-8413-028cc2ca5b82" />
 
 C++ / Qt window for comparing all three pose streams while moving a tracked
 robot by hand:
